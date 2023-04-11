@@ -35,7 +35,7 @@ docker run -it \
   -v C://Users//alexs//Documents//GitHub//Data-Talk-s-Data-Engineering-Course//week_1_basics_n_setup//2_docker_sql//ny_taxi_postgres_data:/var/lib/postresql/data \
   -p 5432:5432 \
   --network=pg-network \
-  --name pg-database1 \
+  --name pg-database \
 postgres:13
 
 
