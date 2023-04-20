@@ -22,7 +22,7 @@ docker run -it \
   -e PGADMIN_DEFAULT_PASSWORD="root" \
   -p 8080:80 \
   --network=pg-network \
-  --name pgadmin-2 \
+  --name pgadmin \
   dpage/pgadmin4
 
 ##network
@@ -38,6 +38,7 @@ docker run -it \
   --name pg-database \
 postgres:13
 
+##
 
 
 URL="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"
@@ -63,3 +64,26 @@ docker run -it \
     --db=ny_taxi \
     --table_name=yellow_taxi_trips \
     --url=${URL} 
+
+##old stuff
+
+docker run -it \
+  --network=pg-network \
+  taxi_ingest:v001 \
+    --user=root \
+    --pass=root \
+    --host=pg-database \
+    --port=5432 \
+    --db=ny_taxi \
+    --table_name=yellow_taxi_trips \
+    --url=${URL} 
+
+networks:
+      - pg-network
+
+networks:
+      - pg-network
+networks:
+  pg-network:
+    name: pg-network
+
