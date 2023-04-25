@@ -55,7 +55,7 @@ python ingest_data.py \
 docker build -t taxi_ingest:v001 .
 
 docker run -it \
-  --network=2_docker_sql_default \
+  --network=2_docker_sql_default  \
   taxi_ingest:v001 \
     --user=root \
     --pass=root \
