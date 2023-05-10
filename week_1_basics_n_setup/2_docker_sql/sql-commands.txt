@@ -1,0 +1,45 @@
+Inner Join:
+select tpep_pickup_datetime, tpep_dropoff_datetime, total_amount, CONCAT(zpu."Borough", ' / ', zpu."Zone") as "pickup_loc", CONCAT(zdo."Borough", ' / ', zpu."Zone") as "dropoff_loc"
+from yellow_taxi_trips t, zones zpu, zones zdo
+where t."PULocationID" = zpu."LocationID" and t."DOLocationID" = zdo."LocationID"
+limit 100;
+
+Explicit Inner Join:
+select tpep_pickup_datetime, tpep_dropoff_datetime, total_amount, CONCAT(zpu."Borough", ' / ', zpu."Zone") as "pickup_loc", CONCAT(zdo."Borough", ' / ', zpu."Zone") as "dropoff_loc"
+from yellow_taxi_trips t join zones zpu on t."PULocationID" = zpu."LocationID" join zones zdo on t."DOLocationID" = zdo."LocationID"
+limit 100;
+
+Checking for records with LocationID not in Zones table:
+select tpep_pickup_datetime, tpep_dropoff_datetime, total_amount, "PULocationID", "DOLocationID"
+from yellow_taxi_trips t
+where "PULocationID" is NULL
+limit 100;
+
+Checking for LocationIDs in the Zones table not in the yellow taxi table:
+select tpep_pickup_datetime, tpep_dropoff_datetime, total_amount, "PULocationID", "DOLocationID"
+from yellow_taxi_trips t
+where "DOLocationID" not in (SELECT "LocationID" FROM zones)
+limit 100;
+
+Using Group By to count trips per day:
+select CAST(tpep_dropoff_datetime as DATE) as "day", count(1)
+from yellow_taxi_trips t
+group by CAST(tpep_dropoff_datetime as DATE)
+
+Using Order By to order the results of the query:
+select CAST(tpep_dropoff_datetime as DATE) as "day", count(1) as "count"
+from yellow_taxi_trips t
+group by CAST(tpep_dropoff_datetime as DATE)
+order by "count" desc;
+
+Other Aggregations (passenger count):
+select CAST(tpep_dropoff_datetime as DATE) as "day", count(1) as "count", max(total_amount), max(passenger_count)
+from yellow_taxi_trips t
+group by CAST(tpep_dropoff_datetime as DATE)
+order by "count" desc;
+
+Grouping by multiple fields:
+select CAST(tpep_dropoff_datetime as DATE) as "day", "DOLocationID", count(1) as "count", max(total_amount), max(passenger_count)
+from yellow_taxi_trips t
+group by 1, 2
+order by "day" asc, "DOLocationID" asc;
